@@ -1,0 +1,50 @@
+﻿
+
+  PredictionMarket Contract
+    Event Creation
+      Γ£ö Should create an event and store correct details
+      Γ£ö Should increment eventId for multiple events
+    Staking and Funds Locking
+      Γ£ö Should allow multiple users to stake and lock funds in the contract
+      Γ£ö Should correctly track individual user stakes
+      1) Should revert if staking after endTime
+    Resolution and Rewards
+      2) Should only allow the creator to resolve
+      3) "before each" hook for "Should distribute rewards proportionally (Case: YES wins)"
+
+
+  4 passing (455ms)
+  3 failing
+
+  1) PredictionMarket Contract
+       Staking and Funds Locking
+         Should revert if staking after endTime:
+     Error: VM Exception while processing transaction: reverted with reason string 'End time must be in future'
+    at PredictionMarket.createPrediction (contracts/PredictionMarket.sol:43)
+    at EdrProviderWrapper.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:453:41)
+    at HardhatEthersSigner.sendTransaction (node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.createPrediction (node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at Context.<anonymous> (file:///C:/Users/sinch/Desktop/predict%20chain/blockchain/test/PredictionMarket.js:75:7)
+  
+
+  2) PredictionMarket Contract
+       Resolution and Rewards
+         Should only allow the creator to resolve:
+     AssertionError: Expected transaction to be reverted with reason 'Only the creator can resolve', but it reverted with reason 'Only owner can call this'
+      at Context.<anonymous> (file:///C:/Users/sinch/Desktop/predict%20chain/blockchain/test/PredictionMarket.js:102:7)
+
+  3) PredictionMarket Contract
+       Resolution and Rewards
+         "before each" hook for "Should distribute rewards proportionally (Case: YES wins)":
+     Error: VM Exception while processing transaction: reverted with reason string 'End time must be in future'
+    at PredictionMarket.createPrediction (contracts/PredictionMarket.sol:43)
+    at EdrProviderWrapper.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:453:41)
+    at HardhatEthersSigner.sendTransaction (node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.createPrediction (node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at Context.<anonymous> (file:///C:/Users/sinch/Desktop/predict%20chain/blockchain/test/PredictionMarket.js:90:7)
+  
+
+
+
