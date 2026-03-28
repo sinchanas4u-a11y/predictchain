@@ -63,3 +63,4 @@ npm run dev
    ```
 4. Update the `CONTRACT_ADDRESS` in `frontend/src/context/Web3Context.jsx` with your new deployed Shardeum Testnet address.
 # PredictChain
+# predictchain
