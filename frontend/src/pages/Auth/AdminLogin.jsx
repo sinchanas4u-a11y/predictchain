@@ -6,16 +6,27 @@ export default function AdminLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const success = await login(username, password, 'admin');
-    if (success) {
-      navigate('/admin');
-    } else {
-      setError('Invalid username or password');
+    setLoading(true);
+    setError('');
+
+    try {
+      const result = await login(username, password, 'admin');
+      if (result.success) {
+        navigate('/admin');
+      } else {
+        setError(result.message || 'Invalid username or password');
+      }
+    } catch (err) {
+      console.error('Admin Login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -24,7 +35,7 @@ export default function AdminLogin() {
       <h2 style={{ fontSize: '1.75rem', marginBottom: '1.5rem', textAlign: 'center', color: 'var(--success)' }}>Event Creator Login</h2>
       
       {error && (
-        <div style={{ padding: '0.75rem', marginBottom: '1.5rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)', textAlign: 'center' }}>
+        <div style={{ padding: '0.75rem', marginBottom: '1.5rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)', textAlign: 'center', fontSize: '0.875rem' }}>
           {error}
         </div>
       )}
@@ -40,6 +51,7 @@ export default function AdminLogin() {
             onChange={(e) => setUsername(e.target.value)}
             required
             autoFocus
+            disabled={loading}
           />
         </div>
         
@@ -52,11 +64,17 @@ export default function AdminLogin() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={loading}
           />
         </div>
         
-        <button type="submit" className="btn btn-success" style={{ width: '100%', padding: '0.75rem' }}>
-          Access Admin Dashboard
+        <button 
+          type="submit" 
+          className="btn btn-success" 
+          style={{ width: '100%', padding: '0.75rem' }}
+          disabled={loading}
+        >
+          {loading ? 'Accessing...' : 'Access Admin Dashboard'}
         </button>
       </form>
     </div>

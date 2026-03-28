@@ -16,7 +16,11 @@ import AdminLogin from './pages/Auth/AdminLogin';
 
 function App() {
   const { account, connectWallet } = useWeb3();
-  const { user, logout } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
+
+  if (authLoading) {
+    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--primary)' }}>Loading Session...</div>;
+  }
 
   return (
     <BrowserRouter>
@@ -63,6 +67,15 @@ function App() {
             <Route path="/user" element={<UserDashboard />} />
             <Route path="/user-login" element={<UserLogin />} />
             <Route path="/admin-login" element={<AdminLogin />} />
+            
+            {/* Fallback for 404 */}
+            <Route path="*" element={
+              <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+                <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>404 - Page Not Found</h2>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>The page you're looking for doesn't exist or has moved.</p>
+                <Link to="/" className="btn btn-primary">Go Home</Link>
+              </div>
+            } />
           </Routes>
         </main>
       </div>

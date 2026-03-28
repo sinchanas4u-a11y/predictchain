@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function AdminDashboard() {
   const { contract, account } = useWeb3();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('create'); // 'create' or 'resolve'
   const [endedEvents, setEndedEvents] = useState([]);
@@ -16,10 +16,10 @@ export default function AdminDashboard() {
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
+    if (!authLoading && (!user || user.role !== 'admin')) {
       navigate('/admin-login');
     }
-  }, [user, navigate]);
+  }, [user, authLoading, navigate]);
 
   useEffect(() => {
     if (contract) {
@@ -34,6 +34,9 @@ export default function AdminDashboard() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, activeTab, isOwner]);
+
+  if (authLoading) return <div style={{ textAlign: 'center', padding: '4rem' }}>Loading Admin Session...</div>;
+  if (!user || user.role !== 'admin') return null;
 
   const checkOwner = async () => {
     try {
@@ -80,8 +83,6 @@ export default function AdminDashboard() {
       setResolving(null);
     }
   };
-
-  if (!user || user.role !== 'admin') return null;
 
   if (!contract || !account) {
     return <div style={{ textAlign: 'center', marginTop: '4rem' }}>Please connect your wallet.</div>;

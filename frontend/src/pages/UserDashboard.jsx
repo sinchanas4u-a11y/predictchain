@@ -8,16 +8,17 @@ import { Wallet, LayoutDashboard, History } from 'lucide-react';
 
 export default function UserDashboard() {
   const { account } = useWeb3();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('market'); // 'market' or 'history'
 
   useEffect(() => {
-    if (!user || user.role !== 'user') {
+    if (!authLoading && (!user || user.role !== 'user')) {
       navigate('/user-login');
     }
-  }, [user, navigate]);
+  }, [user, authLoading, navigate]);
 
+  if (authLoading) return <div style={{ textAlign: 'center', padding: '4rem' }}>Loading Dashboard...</div>;
   if (!user || user.role !== 'user') return null;
 
   return (

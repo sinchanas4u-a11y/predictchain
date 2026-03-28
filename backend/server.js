@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db');
 const User = require('./models/User');
 
@@ -15,6 +16,13 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+// Token generator
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    });
+};
+
 // Routes
 app.post('/api/register', async (req, res) => {
     const { username, password, role } = req.body;
@@ -25,9 +33,14 @@ app.post('/api/register', async (req, res) => {
         }
         user = new User({ username, password, role });
         await user.save();
-        res.status(201).json({ username: user.username, role: user.role });
+        
+        res.status(201).json({ 
+            username: user.username, 
+            role: user.role,
+            token: generateToken(user._id)
+        });
     } catch (err) {
-        console.error(err.message);
+        console.error('Registration error:', err.message);
         res.status(500).send('Server error');
     }
 });
@@ -36,12 +49,17 @@ app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username });
-        if (!user || user.password !== password) {
+        if (!user || !(await user.matchPassword(password))) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-        res.json({ username: user.username, role: user.role });
+        
+        res.json({ 
+            username: user.username, 
+            role: user.role,
+            token: generateToken(user._id)
+        });
     } catch (err) {
-        console.error(err.message);
+        console.error('Login error:', err.message);
         res.status(500).send('Server error');
     }
 });
