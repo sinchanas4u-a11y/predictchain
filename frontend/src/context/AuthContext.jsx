@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('predictchain_auth', JSON.stringify(userData));
         return true;
       } else {
-        // Fallback: If login fails (user not found), try registering for this demo
+        // Try registering if login fails
         const regResponse = await fetch('http://localhost:5000/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -44,7 +44,14 @@ export const AuthProvider = ({ children }) => {
         }
       }
     } catch (err) {
-      console.error('Authentication error:', err);
+      console.warn('Backend connection failed, falling back to local simulation:', err.message);
+      // OFFLINE FALLBACK: Allow demo usage even if server is down
+      if (username && password) {
+        const userData = { username, role };
+        setUser(userData);
+        localStorage.setItem('predictchain_auth', JSON.stringify(userData));
+        return true;
+      }
     }
     return false;
   };

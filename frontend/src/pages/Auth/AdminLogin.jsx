@@ -9,9 +9,10 @@ export default function AdminLogin() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (login(username, password, 'admin')) {
+    const success = await login(username, password, 'admin');
+    if (success) {
       navigate('/admin');
     } else {
       setError('Invalid username or password');

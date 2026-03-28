@@ -9,9 +9,10 @@ export default function UserLogin() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (login(username, password, 'user')) {
+    const success = await login(username, password, 'user');
+    if (success) {
       navigate('/user');
     } else {
       setError('Invalid username or password');
