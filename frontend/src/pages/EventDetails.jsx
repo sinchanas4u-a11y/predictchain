@@ -282,6 +282,34 @@ export default function EventDetails() {
           )}
         </div>
 
+        {isOwner && !eventData.resolved && isEnded && (
+          <div className="glass-panel" style={{ padding: '1.5rem', border: '1px solid var(--primary)' }}>
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <AlertCircle size={20} color="var(--primary)" /> Admin Actions
+            </h3>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+              As the contract owner, you can resolve this event since it has reached its end time.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button 
+                className="btn btn-success" 
+                style={{ flex: 1 }}
+                onClick={() => handleResolve(true)}
+                disabled={isSubmitting}
+              >
+                Resolve YES
+              </button>
+              <button 
+                className="btn btn-danger" 
+                style={{ flex: 1 }}
+                onClick={() => handleResolve(false)}
+                disabled={isSubmitting}
+              >
+                Resolve NO
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
