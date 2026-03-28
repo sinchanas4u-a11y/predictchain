@@ -1,11 +1,7 @@
-# Dependencies
-node_modules
-pnpm-lock.yaml
-
-# Build outputs
-/dist
-/dist-ssr
-*.local
+# Node.js
+node_modules/
+dist/
+build/
 
 # Environment Variables
 .env
@@ -22,15 +18,18 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# System Files
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Other
 .DS_Store
 Thumbs.db
-
-# Editor directories and files
-.vscode
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
